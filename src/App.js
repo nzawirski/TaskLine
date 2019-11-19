@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import LandingPage from "./components/LandingPage"
-import SignInForm from "./components/SignInForm"
-import SignUpForm from "./components/SignUpForm"
 import Dashboard from "./components/Dashboard"
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
@@ -12,9 +10,7 @@ class App extends Component {
     return (
       <Router>
         <div className="container App">
-          <Route exact path="/" component={LandingPage} />
-          <Route path="/signUp" component={SignUpForm} />
-          <Route path="/signIn" component={SignInForm} />
+          <Route path="/" component={LandingPage} />
           <ProtectedRoute path="/dashboard" component={Dashboard} />
         </div>
       </Router>
