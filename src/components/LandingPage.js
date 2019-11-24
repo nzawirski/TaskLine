@@ -11,28 +11,52 @@ class LandingPage extends Component {
         super(props);
         this.state = {}
     }
+
     render() {
+        const partent = {
+            display: "flex",
+            width: "100%",
+
+        }
+        const leftDiv = {
+            backgroundColor: "DodgerBlue",
+            margin: "0px",
+            padding: "0px",
+            color: "white",
+            width: "50%",
+
+
+        }
+        const rightDiv = {
+            width: "50%",
+            height: "100%",
+
+        }
         return (
-            <div>
-                <h1>Hello World</h1>
-                <List>
-                    {
-                        [{ name: "Sign Up", link: '/signUp' },
-                        { name: "Sign In", link: '/signIn' },
-                        ].map((item, i) => (
-                            <ListItem button key={i}>
-                                <Link to={item.link}>{item.name}</Link>
-                            </ListItem>
-                        ))
-                    }
-                </List>
+            <div style={partent}>
+                <div style={leftDiv}>
+                    <h1>Hello World</h1>
+                    <p>Welcome to taskline blablaba</p>
+                </div>
+                <div style={rightDiv}>
+                    <List>
+                        {
+                            [{ name: "Sign Up", link: '/signUp' },
+                            { name: "Sign In", link: '/signIn' },
+                            ].map((item, i) => (
+                                <ListItem button key={i}>
+                                    <Link to={item.link}>{item.name}</Link>
+                                </ListItem>
+                            ))
+                        }
+                    </List>
 
-                <Switch>
-                    <Route path="/signUp" component={SignUpForm} />
-                
-                    <Route path="/signIn" component={SignInForm}/>
-                </Switch>
+                    <Switch>
+                        <Route path="/signUp" component={SignUpForm} />
 
+                        <Route path="/signIn" component={SignInForm} />
+                    </Switch>
+                </div>
             </div>
         );
     }
