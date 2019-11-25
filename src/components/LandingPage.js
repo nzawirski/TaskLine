@@ -4,6 +4,7 @@ import SignInForm from "./SignInForm"
 import SignUpForm from "./SignUpForm"
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
 
 
 class LandingPage extends Component {
@@ -16,22 +17,23 @@ class LandingPage extends Component {
         const partent = {
             display: "flex",
             width: "100%",
-
+            height: "100%",
+            position: "absolute",
         }
         const leftDiv = {
             backgroundColor: "DodgerBlue",
             margin: "0px",
-            padding: "0px",
+            padding: "15px",
             color: "white",
             width: "50%",
 
-
         }
         const rightDiv = {
+            margin: "0px",
+            padding: "15px",
             width: "50%",
-            height: "100%",
-
         }
+
         return (
             <div style={partent}>
                 <div style={leftDiv}>
@@ -39,22 +41,17 @@ class LandingPage extends Component {
                     <p>Welcome to taskline blablaba</p>
                 </div>
                 <div style={rightDiv}>
-                    <List>
-                        {
-                            [{ name: "Sign Up", link: '/signUp' },
-                            { name: "Sign In", link: '/signIn' },
-                            ].map((item, i) => (
-                                <ListItem button key={i}>
-                                    <Link to={item.link}>{item.name}</Link>
-                                </ListItem>
-                            ))
-                        }
-                    </List>
+
+                    <ButtonToolbar>
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+                            <ToggleButton onClick={() => { this.props.history.push('/signUp') }} value={1}>Sign Up</ToggleButton>
+                            <ToggleButton onClick={() => { this.props.history.push('/signIn') }} value={2}>Sign In</ToggleButton>
+                        </ToggleButtonGroup>
+                    </ButtonToolbar>
 
                     <Switch>
-                        <Route path="/signUp" component={SignUpForm} />
-
-                        <Route path="/signIn" component={SignInForm} />
+                        <Route exact path="/signIn" component={SignInForm} />
+                        <Route path="/" component={SignUpForm} />
                     </Switch>
                 </div>
             </div>

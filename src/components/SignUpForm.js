@@ -89,7 +89,7 @@ class SignUpForm extends Component {
     render() {
         return (
             <div>
-                <h1>Sign UP</h1>
+                <h1>Create new account</h1>
                 <form style={styles.contentBox} onSubmit={this.onSubmit}>
                     <TextField
                         required
