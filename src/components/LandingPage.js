@@ -33,7 +33,11 @@ class LandingPage extends Component {
             padding: "15px",
             width: "50%",
         }
-
+        let buttonToggle = 1
+        if(window.location.pathname == "/signIn"){
+            buttonToggle = 2
+        }
+        
         return (
             <div style={partent}>
                 <div style={leftDiv}>
@@ -43,7 +47,7 @@ class LandingPage extends Component {
                 <div style={rightDiv}>
 
                     <ButtonToolbar>
-                        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={buttonToggle}>
                             <ToggleButton onClick={() => { this.props.history.push('/signUp') }} value={1}>Sign Up</ToggleButton>
                             <ToggleButton onClick={() => { this.props.history.push('/signIn') }} value={2}>Sign In</ToggleButton>
                         </ToggleButtonGroup>
