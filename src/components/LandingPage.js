@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Link, Route, Switch } from "react-router-dom";
 import SignInForm from "./SignInForm"
 import SignUpForm from "./SignUpForm"
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
 
 
@@ -33,11 +31,19 @@ class LandingPage extends Component {
             padding: "15px",
             width: "50%",
         }
+
+        //form button toggle
         let buttonToggle = 1
         if(window.location.pathname == "/signIn"){
             buttonToggle = 2
+            
         }
-        
+
+        // check if not logged in already
+        if( localStorage.getItem('token') && localStorage.getItem('token') !==  "null" ){
+            window.location = '/dashboard';
+        }
+
         return (
             <div style={partent}>
                 <div style={leftDiv}>

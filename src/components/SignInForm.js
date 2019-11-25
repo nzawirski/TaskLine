@@ -44,12 +44,10 @@ class SignInForm extends Component {
 
         axios.post('http://localhost:3001/api/login/', credentials)
             .then(response => {
-                console.log(response.data)
                 localStorage.setItem('token',response.data.token);
                 window.location = '/';
             })
             .catch(error => {
-                console.log(error.response)
                 this.setState({isError: true})
                 switch(error.response.status){
                     case 400:

@@ -51,12 +51,15 @@ class SignUpForm extends Component {
 
         axios.post('http://localhost:3001/api/users/', user)
             .then(response => {
-                console.log(response)
                 window.location = '/';
             })
             .catch(error => {
-                console.log(error.response)
                 this.setState({isError: true})
+                if(!error.response){
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
                 switch(error.response.status){
                     case 400:
                         this.setState({

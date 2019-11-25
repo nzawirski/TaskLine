@@ -11,7 +11,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
-          <Route path="/" component={LandingPage} />
+          <Route exact path={["/", "/signIn", "/signUp"]} component={LandingPage} />
           <ProtectedRoute path="/dashboard" component={Dashboard} />
         </div>
       </Router>
