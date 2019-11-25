@@ -8,7 +8,6 @@ import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap'
 class LandingPage extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
     }
 
     render() {

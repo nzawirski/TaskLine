@@ -44,7 +44,7 @@ class SignInForm extends Component {
 
         axios.post('http://localhost:3001/api/login/', credentials)
             .then(response => {
-                localStorage.setItem('token',response.data.token);
+                localStorage.setItem('token', 'Bearer ' + response.data.token);
                 window.location = '/';
             })
             .catch(error => {
