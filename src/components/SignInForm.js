@@ -42,7 +42,7 @@ class SignInForm extends Component {
             password: this.state.password
         }
 
-        axios.post('http://localhost:3001/api/login/', credentials)
+        axios.post(process.env.REACT_APP_API_URL + '/api/login/', credentials)
             .then(response => {
                 localStorage.setItem('token', 'Bearer ' + response.data.token);
                 window.location = '/';

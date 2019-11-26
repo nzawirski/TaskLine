@@ -33,13 +33,13 @@ class LandingPage extends Component {
 
         //form button toggle
         let buttonToggle = 1
-        if(window.location.pathname == "/signIn"){
+        if (window.location.pathname == "/signIn") {
             buttonToggle = 2
-            
+
         }
 
         // check if not logged in already
-        if( localStorage.getItem('token') && localStorage.getItem('token') !==  "null" ){
+        if (localStorage.getItem('token') && localStorage.getItem('token') !== "null") {
             window.location = '/dashboard';
         }
 
@@ -48,6 +48,8 @@ class LandingPage extends Component {
                 <div style={leftDiv}>
                     <h1>Hello World</h1>
                     <p>Welcome to taskline blablaba</p>
+                    <h1>{process.env.NODE_ENV}</h1>
+                    <h1>{process.env.REACT_APP_API_URL}</h1>
                 </div>
                 <div style={rightDiv}>
 

@@ -11,7 +11,7 @@ class Dashboard extends Component {
         response: null
     }
     componentDidMount() {
-        axios.get('http://localhost:3001/api/me', { 'headers': { 'Authorization': localStorage.getItem('token') } })
+        axios.get(process.env.REACT_APP_API_URL + '/api/me', { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ response: response })
                 this.setState({ username: response.data.username})

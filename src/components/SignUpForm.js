@@ -49,7 +49,7 @@ class SignUpForm extends Component {
             password: this.state.password
         }
 
-        axios.post('http://localhost:3001/api/users/', user)
+        axios.post(process.env.REACT_APP_API_URL + '/api/users/', user)
             .then(response => {
                 window.location = '/';
             })
