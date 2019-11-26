@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import SignInForm from "./SignInForm"
 import SignUpForm from "./SignUpForm"
 import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
 
 
 class LandingPage extends Component {
-    constructor(props) {
-        super(props);
-    }
 
     render() {
         const partent = {
