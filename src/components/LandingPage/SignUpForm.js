@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TextField from "@material-ui/core/TextField";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
-import CustomSnackbar from './CustomSnackbar'
+import CustomSnackbar from '../CustomSnackbar'
 
 const styles = {
     contentBox: {
@@ -15,13 +15,13 @@ const styles = {
     }
 };
 
-class SignInForm extends Component {
+class SignUpForm extends Component {
 
     state = {
-        username:'',
-        password:'',
-        errorMessage:null,
-        isError:false
+        username: "",
+        email: "",
+        password: "",
+        errorMessage: ""
     };
 
     onChangeUsername = e => {
@@ -29,35 +29,46 @@ class SignInForm extends Component {
             username: e.target.value
         })
     }
+    onChangeEmail = e => {
+        this.setState({
+            email: e.target.value
+        })
+    }
     onChangePassword = e => {
         this.setState({
             password: e.target.value
         })
     }
+
     onSubmit = e => {
         e.preventDefault();
 
-        const credentials = {
+        const user = {
             username: this.state.username,
+            email: this.state.email,
             password: this.state.password
         }
 
-        axios.post(process.env.REACT_APP_API_URL + '/api/login/', credentials)
+        axios.post(process.env.REACT_APP_API_URL + '/api/users/', user)
             .then(response => {
-                localStorage.setItem('token', 'Bearer ' + response.data.token);
                 window.location = '/';
             })
             .catch(error => {
                 this.setState({isError: true})
+                if(!error.response){
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
                 switch(error.response.status){
                     case 400:
                         this.setState({
-                            errorMessage: "Username or password are incorrect"
+                            errorMessage: "Please fill out all fields"
                         })
                         break;
-                    case 404:
+                    case 409:
                         this.setState({
-                            errorMessage: "User does not exist"
+                            errorMessage: "User already exists"
                         })
                         break;
                     default:
@@ -71,16 +82,17 @@ class SignInForm extends Component {
 
         //window.location = '/';
     }
+
     handleClose = () => {
         this.setState({
-            isError:!this.state.isError
+            isError: !this.state.isError
         })
     };
 
-    render() { 
-        return ( 
+    render() {
+        return (
             <div>
-                <h1>Sign IN</h1>
+                <h1>Create new account</h1>
                 <form style={styles.contentBox} onSubmit={this.onSubmit}>
                     <TextField
                         required
@@ -88,6 +100,16 @@ class SignInForm extends Component {
                         margin="normal"
                         value={this.state.username}
                         onChange={this.onChangeUsername}
+                        fullWidth
+                        variant="outlined"
+                    />
+                    <TextField
+                        required
+                        label="email"
+                        type="email"
+                        margin="normal"
+                        value={this.state.email}
+                        onChange={this.onChangeEmail}
                         fullWidth
                         variant="outlined"
                     />
@@ -107,13 +129,13 @@ class SignInForm extends Component {
                         style={{ marginTop: '20px' }}
                         variant="outline-success"
                     >
-                        {'Login'}
+                        {'Register'}
                     </Button>
                     <CustomSnackbar isError={this.state.isError} errorMessage={this.state.errorMessage} handleClose={this.handleClose} />
                 </form>
             </div>
-         );
+        );
     }
 }
 
-export default SignInForm;
+export default SignUpForm;

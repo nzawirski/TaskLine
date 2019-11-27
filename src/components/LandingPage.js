@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from "react-router-dom";
-import SignInForm from "./SignInForm"
-import SignUpForm from "./SignUpForm"
+import SignInForm from "./LandingPage/SignInForm"
+import SignUpForm from "./LandingPage/SignUpForm"
 import { ToggleButtonGroup, ToggleButton, ButtonToolbar } from 'react-bootstrap';
 
 
@@ -30,14 +30,14 @@ class LandingPage extends Component {
 
         //form button toggle
         let buttonToggle = 1
-        if (window.location.pathname == "/signIn") {
+        if (window.location.pathname === "/signIn") {
             buttonToggle = 2
 
         }
 
         // check if not logged in already
         if (localStorage.getItem('token') && localStorage.getItem('token') !== "null") {
-            window.location = '/dashboard';
+            window.location = '/main';
         }
 
         return (

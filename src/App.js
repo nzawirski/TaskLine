@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import LandingPage from "./components/LandingPage"
-import Dashboard from "./components/Dashboard"
+import Main from "./components/Main"
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import './App.css';
 import { ProtectedRoute } from './components/router/ProtectedRoute';
@@ -12,7 +12,7 @@ class App extends Component {
       <Router>
         <div className="App">
           <Route exact path={["/", "/signIn", "/signUp"]} component={LandingPage} />
-          <ProtectedRoute path="/dashboard" component={Dashboard} />
+          <ProtectedRoute path="/main" component={Main} />
         </div>
       </Router>
     )
