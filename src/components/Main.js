@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
-import { Link, Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 import Dashboard from './MainContainer/Dashboard'
+import Projects from './MainContainer/Projects'
+import Settings from './MainContainer/Settings'
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -110,6 +112,8 @@ class Main extends Component {
                     <p>Hello {this.state.username} {this.state.email}</p>
                     <Switch>
                         <Route exact path={["/main", "/main/dashboard"]} component={Dashboard} />
+                        <Route exact path={"/main/projects"} component={Projects} />
+                        <Route exact path={"/main/settings"} component={Settings} />
                     </Switch>
                     <Button onClick={this.logOut}>Log out</Button>
                 </div>
