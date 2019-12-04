@@ -40,6 +40,8 @@ const styles = {
         height: 171,
         objectFit: 'cover'
     },
+    //Topbar
+
 
     //Content
     contentPanel: {
@@ -50,12 +52,19 @@ const styles = {
 };
 
 class Main extends Component {
-
+    constructor(props) {
+        super(props)
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+        this.renderSidebar = this.renderSidebar.bind(this)
+    }
     state = {
         response: null
     }
 
     componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
+
         axios.get(process.env.REACT_APP_API_URL + '/api/me', { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ response: response })
@@ -65,15 +74,25 @@ class Main extends Component {
             })
     }
 
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+        console.log(this.state.width + " " + this.state.height)
+    }
+
+
     logOut() {
         localStorage.setItem('token', null);
         window.location = '/';
     }
-    render() {
 
-        return (
-            <div style={styles.mainContainer}>
-                {/* SIDEBAR */}
+
+    renderSidebar(props) {
+        if (this.state.width > 1024) {
+            return (
                 <div style={styles.menuPanel}>
 
                     <div style={styles.avatarAndName}>
@@ -102,10 +121,22 @@ class Main extends Component {
                             }
                             <ListItem button onClick={this.logOut}>
                                 Log Out
-                            </ListItem>
+        </ListItem>
                         </List>
                     </div>
                 </div>
+            )
+        }else{
+            return (<h1>topbar should appear</h1>)
+        }
+    }
+
+    render() {
+
+        return (
+            <div style={styles.mainContainer}>
+                {/* SIDEBAR */}
+                <this.renderSidebar/>
                 {/* CONTENT */}
                 <div style={styles.contentPanel}>
                     <h1>Main</h1>
