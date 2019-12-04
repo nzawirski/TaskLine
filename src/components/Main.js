@@ -8,8 +8,6 @@ import Settings from './MainContainer/Settings'
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import Nav from 'react-bootstrap/Nav'
 
 const styles = {
@@ -17,7 +15,7 @@ const styles = {
         display: 'flex',
         flexDirection: 'row',
         height: '100vh',
-        
+
     },
 
     //Sidebar
@@ -43,13 +41,21 @@ const styles = {
         objectFit: 'cover'
     },
     //Topbar
-    navBar: {
+    navBarHorizontal: {
         width: "100%",
         position: 'absolute',
-        display: 'flex',
+        
     },
-    navBarItem: {
+    navBarHorizontalItem: {
+        width: '100%',
         flex: 1
+    },
+    navBarVertical: {
+
+    },
+    navBarVerticalItem: {
+        width: '100%',
+        color: 'white',
     },
 
     //Content
@@ -102,6 +108,7 @@ class Main extends Component {
 
     renderSidebar() {
         if (this.state.width > 1024) {
+            // Vertical
             return (
                 <div style={styles.menuPanel}>
 
@@ -117,39 +124,42 @@ class Main extends Component {
                     </div>
 
                     <div style={styles.listContainer}>
-                        <List>
+                        <Nav fill variant="pills">
                             {
                                 [
                                     { name: "Dashboard", link: "/main" },
                                     { name: "Projects", link: "/main/projects" },
                                     { name: "Settings", link: "/main/settings" },
                                 ].map((item, i) => (
-                                    <ListItem button key={i} onClick={() => { this.props.history.push(item.link) }}>
-                                        {item.name}
-                                    </ListItem>
+                                    <Nav.Link style={styles.navBarVerticalItem} eventKey={item.link} key={i} onClick={() => { this.props.history.push(item.link) }}>
+                                        {item.name}</Nav.Link>
                                 ))
                             }
-                            <ListItem button onClick={this.logOut}>
+                            <Nav.Link style={styles.navBarVerticalItem} onClick={this.logOut}>
                                 Log Out
-                            </ListItem>
-                        </List>
+                            </Nav.Link>
+                        </Nav>
                     </div>
                 </div>
             )
         } else {
+            // Horizontal
             return (
-                <Nav variant="pills" activeKey={window.location.pathname} style={styles.navBar}>
+                <Nav fill variant="pills" activeKey={window.location.pathname} style={styles.navBarHorizontal}>
                     {
                         [
                             { name: "Dashboard", link: "/main" },
                             { name: "Projects", link: "/main/projects" },
                             { name: "Settings", link: "/main/settings" },
                         ].map((item, i) => (
-                            <Nav.Item key={i} style={styles.navBarItem}>
+                            <Nav.Item key={i} style={styles.navBarHorizontalItem}>
                                 <Nav.Link eventKey={item.link} onClick={() => { this.props.history.push(item.link) }}>{item.name}</Nav.Link>
                             </Nav.Item>
                         ))
                     }
+                    <Nav.Link style={styles.navBarHorizontalItem} onClick={this.logOut}>
+                                Log Out
+                            </Nav.Link>
                 </Nav>)
         }
     }
