@@ -44,7 +44,7 @@ const styles = {
     navBarHorizontal: {
         width: "100%",
         position: 'absolute',
-        
+
     },
     navBarHorizontalItem: {
         width: '100%',
@@ -99,7 +99,6 @@ class Main extends Component {
         //console.log(this.state.width + " " + this.state.height)
     }
 
-
     logOut() {
         localStorage.setItem('token', null);
         window.location = '/';
@@ -124,7 +123,7 @@ class Main extends Component {
                     </div>
 
                     <div style={styles.listContainer}>
-                        <Nav fill variant="pills">
+                        <Nav fill variant="pills" activeKey={window.location.pathname}>
                             {
                                 [
                                     { name: "Dashboard", link: "/main" },
@@ -158,8 +157,8 @@ class Main extends Component {
                         ))
                     }
                     <Nav.Link style={styles.navBarHorizontalItem} onClick={this.logOut}>
-                                Log Out
-                            </Nav.Link>
+                        Log Out
+                    </Nav.Link>
                 </Nav>)
         }
     }
@@ -172,14 +171,11 @@ class Main extends Component {
                 <this.renderSidebar />
                 {/* CONTENT */}
                 <div style={styles.contentPanel}>
-                    <h1>Main</h1>
-                    <p>Hello {this.state.username} {this.state.email}</p>
                     <Switch>
                         <Route exact path={["/main", "/main/dashboard"]} component={Dashboard} />
                         <Route exact path={"/main/projects"} component={Projects} />
                         <Route exact path={"/main/settings"} component={Settings} />
                     </Switch>
-                    <Button onClick={this.logOut}>Log out</Button>
                 </div>
             </div>
         );
