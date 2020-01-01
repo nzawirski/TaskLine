@@ -119,7 +119,7 @@ class Main extends Component {
                                 style={styles.avatar} />
 
                         </IconButton>
-                        <Typography variant="h6">Hello World</Typography>
+                        <Typography variant="h6">Hello {this.state.username}</Typography>
                     </div>
 
                     <div style={styles.listContainer}>
