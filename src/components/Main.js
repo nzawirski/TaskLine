@@ -9,63 +9,7 @@ import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Nav from 'react-bootstrap/Nav'
-
-const styles = {
-    mainContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        height: '100vh',
-
-    },
-
-    //Sidebar
-    menuPanel: {
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'auto',
-        backgroundColor: 'dodgerblue',
-        flex: 2,
-        color: 'white'
-    },
-    avatarAndName: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        paddingBottom: '20px',
-        wordBreak: 'break-all'
-    },
-    avatar: {
-        width: 180,
-        height: 171,
-        objectFit: 'cover'
-    },
-    //Topbar
-    navBarHorizontal: {
-        width: "100%",
-        position: 'absolute',
-
-    },
-    navBarHorizontalItem: {
-        width: '100%',
-        flex: 1
-    },
-    navBarVertical: {
-
-    },
-    navBarVerticalItem: {
-        width: '100%',
-        color: 'white',
-    },
-
-    //Content
-    contentPanel: {
-        marginTop: '24px',
-        padding: '1% 1% 0 1%',
-        flex: 9,
-        backgroundColor: '#FFFFFF'
-    }
-};
+import styles from '../styles'
 
 class Main extends Component {
     constructor(props) {
@@ -86,6 +30,7 @@ class Main extends Component {
                 this.setState({ response: response })
                 this.setState({ username: response.data.username })
                 this.setState({ email: response.data.email })
+                this.setState({ profilePic: response.data.profilePic})
                 //console.log(response)
             })
     }
@@ -108,6 +53,7 @@ class Main extends Component {
     renderSidebar() {
         if (this.state.width > 1024) {
             // Vertical
+            let avatarSrc = process.env.REACT_APP_API_URL + '/' + this.state.profilePic
             return (
                 <div style={styles.menuPanel}>
 
@@ -115,7 +61,7 @@ class Main extends Component {
                         <IconButton>
                             <Avatar
                                 alt=" "
-                                src="https://picsum.photos/id/237/200/300"
+                                src={avatarSrc}
                                 style={styles.avatar} />
 
                         </IconButton>
