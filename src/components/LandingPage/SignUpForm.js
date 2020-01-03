@@ -3,17 +3,7 @@ import TextField from "@material-ui/core/TextField";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
 import CustomSnackbar from '../CustomSnackbar'
-
-const styles = {
-    contentBox: {
-        padding: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        flex: 9
-    }
-};
+import styles from '../../styles'
 
 class SignUpForm extends Component {
 

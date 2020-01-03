@@ -3,25 +3,15 @@ import TextField from "@material-ui/core/TextField";
 import Button from "react-bootstrap/Button";
 import axios from 'axios';
 import CustomSnackbar from '../CustomSnackbar'
-
-const styles = {
-    contentBox: {
-        padding: '20px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        flex: 9
-    }
-};
+import styles from '../../styles'
 
 class SignInForm extends Component {
 
     state = {
-        username:'',
-        password:'',
-        errorMessage:null,
-        isError:false
+        username: '',
+        password: '',
+        errorMessage: null,
+        isError: false
     };
 
     onChangeUsername = e => {
@@ -41,15 +31,23 @@ class SignInForm extends Component {
             username: this.state.username,
             password: this.state.password
         }
-
+        console.log(credentials)
+        console.log(process.env.REACT_APP_API_URL + '/api/login/')
         axios.post(process.env.REACT_APP_API_URL + '/api/login/', credentials)
             .then(response => {
                 localStorage.setItem('token', 'Bearer ' + response.data.token);
                 window.location = '/';
             })
             .catch(error => {
-                this.setState({isError: true})
-                switch(error.response.status){
+                this.setState({ isError: true })
+
+                if(!error.response){
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
+
+                switch (error.response.status) {
                     case 400:
                         this.setState({
                             errorMessage: "Username or password are incorrect"
@@ -73,12 +71,12 @@ class SignInForm extends Component {
     }
     handleClose = () => {
         this.setState({
-            isError:!this.state.isError
+            isError: !this.state.isError
         })
     };
 
-    render() { 
-        return ( 
+    render() {
+        return (
             <div>
                 <h1>Sign IN</h1>
                 <form style={styles.contentBox} onSubmit={this.onSubmit}>
@@ -112,7 +110,7 @@ class SignInForm extends Component {
                     <CustomSnackbar isError={this.state.isError} errorMessage={this.state.errorMessage} handleClose={this.handleClose} />
                 </form>
             </div>
-         );
+        );
     }
 }
 

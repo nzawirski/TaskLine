@@ -52,5 +52,14 @@ module.exports = {
         padding: '1% 1% 0 1%',
         flex: 9,
         backgroundColor: '#FFFFFF'
+    },
+    
+    contentBox: {
+        padding: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'column',
+        flex: 9
     }
 };
