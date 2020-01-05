@@ -10,6 +10,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import Nav from 'react-bootstrap/Nav'
 import styles from '../styles'
+import placeholder from '../images/user_placeholder.png'
 
 class Main extends Component {
     constructor(props) {
@@ -61,7 +62,11 @@ class Main extends Component {
                         <IconButton>
                             <Avatar
                                 alt=" "
-                                src={avatarSrc}
+                                src={
+                                    !this.state.profilePic
+                                        ? placeholder
+                                        : avatarSrc
+                                }
                                 style={styles.avatar} />
 
                         </IconButton>

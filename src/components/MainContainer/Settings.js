@@ -27,7 +27,7 @@ class Settings extends Component {
             password: e.target.value
         })
     }
-    getMe(){
+    getMe() {
         axios.get(process.env.REACT_APP_API_URL + '/api/me', { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ response: response })
@@ -39,7 +39,7 @@ class Settings extends Component {
 
     componentDidMount() {
         this.getMe()
-        
+
     }
     onSubmit = e => {
         e.preventDefault();
@@ -52,7 +52,6 @@ class Settings extends Component {
         }
         axios.put(process.env.REACT_APP_API_URL + '/api/me/', credentials, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
-                console.log('ok')
                 window.location = '/';
             })
             .catch(error => {
@@ -88,7 +87,6 @@ class Settings extends Component {
 
             instance.put('/api/me/profilePic', formData)
                 .then(response => {
-                    console.log('ok')
                     this.getMe()
                 })
                 .catch(error => {
@@ -115,15 +113,28 @@ class Settings extends Component {
         }
     };
 
+    delProfPic(){
+        axios.delete(process.env.REACT_APP_API_URL + '/api/me/profilePic', { 'headers': { 'Authorization': localStorage.getItem('token') } })
+            .then(response => {
+                this.getMe()
+            }).catch(err => {
+                this.setState({ isError: true })
+            this.setState({
+                errorMessage: "Error: " + err.response.data
+            })
+            })
+    }
+
     render() {
         return (
             <div>
                 <h1>Settings</h1>
+                <h2>Change profile picture</h2>
                 <form style={styles.contentBox} onSubmit={this.onSubmit}>
                     <img
                         alt=""
                         src={
-                            this.state.profilePic === undefined
+                            !this.state.profilePic
                                 ? placeholder
                                 : `${process.env.REACT_APP_API_URL + '/' + this.state.profilePic}`
                         }
@@ -135,6 +146,15 @@ class Settings extends Component {
                         onChange={(e) => this.profilePicChange(e.target.files[0])}
                     />
                 </form>
+                <Button
+                    type="submit"
+                    style={{ marginTop: '20px' }}
+                    onClick={this.delProfPic}
+                    variant="outline-warning"
+                >
+                    {'Remove current picture'}
+                </Button>
+                <h2>Change username and password</h2>
                 <form style={styles.contentBox} onSubmit={this.onSubmit}>
                     <TextField
                         required
