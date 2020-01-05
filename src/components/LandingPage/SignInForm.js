@@ -8,15 +8,15 @@ import styles from '../../styles'
 class SignInForm extends Component {
 
     state = {
-        username: '',
+        email: '',
         password: '',
         errorMessage: null,
         isError: false
     };
 
-    onChangeUsername = e => {
+    onChangeEmail = e => {
         this.setState({
-            username: e.target.value
+            email: e.target.value
         })
     }
     onChangePassword = e => {
@@ -28,7 +28,7 @@ class SignInForm extends Component {
         e.preventDefault();
 
         const credentials = {
-            username: this.state.username,
+            email: this.state.email,
             password: this.state.password
         }
         console.log(credentials)
@@ -82,10 +82,10 @@ class SignInForm extends Component {
                 <form style={styles.contentBox} onSubmit={this.onSubmit}>
                     <TextField
                         required
-                        label="Username"
+                        label="Email"
                         margin="normal"
-                        value={this.state.username}
-                        onChange={this.onChangeUsername}
+                        value={this.state.email}
+                        onChange={this.onChangeEmail}
                         fullWidth
                         variant="outlined"
                     />
