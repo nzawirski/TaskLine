@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import List from "@material-ui/core/List";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
 import ListItem from "@material-ui/core/ListItem";
 import styles from '../../styles'
+import Moment from 'react-moment';
 
 class Projects extends Component {
 
@@ -55,7 +53,7 @@ class Projects extends Component {
                                     Tasks: {project.tasks.length} Members: {project.members.length}
                                 </div>
                                 <div style={{display:'flex', flexDirection:'row'}}>
-                                    Latest activity: {project.latestActivity}
+                                    Latest activity:&nbsp; <Moment fromNow>{project.latestActivity}</Moment>
                                 </div>
                             </ListItem>
                         ))
