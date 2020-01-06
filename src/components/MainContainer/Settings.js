@@ -113,15 +113,15 @@ class Settings extends Component {
         }
     };
 
-    delProfPic(){
+    delProfPic() {
         axios.delete(process.env.REACT_APP_API_URL + '/api/me/profilePic', { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.getMe()
             }).catch(err => {
                 this.setState({ isError: true })
-            this.setState({
-                errorMessage: "Error: " + err.response.data
-            })
+                this.setState({
+                    errorMessage: "Error: " + err.response.data
+                })
             })
     }
 

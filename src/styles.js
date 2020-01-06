@@ -61,5 +61,20 @@ module.exports = {
         alignItems: 'center',
         flexDirection: 'column',
         flex: 9
+    },
+
+    listItem:{
+        borderRadius:'3px',
+        padding:'5px',
+        margin:'1%',
+        boxShadow:'0 0 2px',
+        minWidth:'45%',
+        maxWidth:'45%',
+        flexDirection:'column'
+    },
+    list:{
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        display: 'flex'
     }
 };
