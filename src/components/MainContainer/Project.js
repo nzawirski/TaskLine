@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
+
 import styles from '../../styles'
-import Moment from 'react-moment';
+
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Button from "react-bootstrap/Button";
+
+import TaskItem from "./TaskItem"
 
 const partent = {
     display: "flex",
@@ -72,26 +74,7 @@ class Project extends Component {
                             <List style={styles.list}>
                                 {
                                     this.state.projectResponse.tasks.map((task) => (
-                                        <ListItem button style={styles.listItem} onClick={() => { this.props.history.push('task/' + task._id) }} key={task._id}>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                {task.name}
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                {task.description}
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                Status: {task.status}
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                Added by {task.added_by.username} &nbsp;<Moment fromNow>{task.create_date}</Moment>
-                                            </div>
-                                            {task.due_date ? 
-                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                                Due&nbsp;<Moment fromNow>{task.due_date}</Moment>
-                                            </div>
-                                            : 
-                                            null}
-                                        </ListItem>
+                                        <TaskItem task={task} onClick={(id) => this.props.history.push('/main/task/' + id)}></TaskItem>
                                     ))
                                 }
                             </List>
