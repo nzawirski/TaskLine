@@ -3,7 +3,7 @@ module.exports = {
         display: 'flex',
         flexDirection: 'row',
         height: '100vh',
-
+        backgroundImage: 'url(https://i.pinimg.com/originals/ea/80/e8/ea80e8bcf70c0a180cdc6905afb3f1c1.jpg)'
     },
 
     //Sidebar
@@ -51,7 +51,7 @@ module.exports = {
         marginTop: '24px',
         padding: '1% 1% 0 1%',
         flex: 9,
-        backgroundColor: '#FFFFFF'
+        // backgroundColor: '#FFFFFF'
     },
     
     contentBox: {
@@ -64,13 +64,14 @@ module.exports = {
     },
 
     listItem:{
-        borderRadius:'3px',
         padding:'5px',
         margin:'1%',
-        boxShadow:'0 0 2px',
         minWidth:'45%',
         maxWidth:'45%',
-        flexDirection:'column'
+        flexDirection:'column',
+        fontFamily: 'monospace',
+        fontSize: '15px',
+        boxShadow: "1px 1px 2px #111111"
     },
     list:{
         flexDirection: 'row',

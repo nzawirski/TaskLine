@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import styles from '../../styles'
 import Moment from 'react-moment';
+import CircularProgress from "@material-ui/core/CircularProgress"
 
 class Projects extends Component {
 
@@ -45,7 +46,7 @@ class Projects extends Component {
                     <List style={styles.list}>
                     {
                         this.state.projectsResponse.map((project) => (
-                            <ListItem button style={styles.listItem}>
+                            <ListItem button style={styles.listItem} onClick={() => { this.props.history.push('project/'+project._id) }} key={project._id}>
                                 <div style={{display:'flex', flexDirection:'row'}}>
                                     {project.name}
                                 </div>
@@ -63,7 +64,7 @@ class Projects extends Component {
             );
         }else{
             return (
-                <h1>Wait.</h1>
+                <CircularProgress />
             );
         }
         
