@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import List from "@material-ui/core/List";
-
+import ListItem from "@material-ui/core/ListItem";
 import styles from '../../styles'
 
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Button from "react-bootstrap/Button";
+import Icon from '@material-ui/core/Icon';
+
 
 import TaskItem from "./TaskItem"
 
@@ -20,6 +22,7 @@ const leftDiv = {
     boxShadow: "2px 2px 2px Gray"
 }
 const rightDiv = {
+    backgroundColor: "white",
     margin: "0px",
     marginLeft: "2px",
     padding: "15px",
@@ -80,8 +83,26 @@ class Project extends Component {
                             </List>
                         </div>
                         <div style={rightDiv}>
-                            <h2>Other</h2>
+                            <h2>Edit project</h2>
                             <Button>Edit project name</Button>
+                            <h2>Members</h2>
+                            <List style={styles.list}>
+                                {
+                                    this.state.projectResponse.members.map((member) => (
+                                        <ListItem button style={styles.listItem} key={member._id}>
+                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                                {
+                                                    member.role == 'admin' ?
+                                                    <Icon>star</Icon>
+                                                    :
+                                                    <Icon>person</Icon>
+                                                }
+                                            {member.user.username}
+                                            </div>
+                                        </ListItem>
+                                    ))
+                                }
+                            </List>
                         </div>
 
 
