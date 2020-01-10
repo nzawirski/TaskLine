@@ -7,7 +7,6 @@ export default function colorTask(dueDate) {
     let fourDays = 1000 * 60 * 60 * 24 * 4;
     let month = 1000 * 60 * 60 * 24 * 28;
 
-    let dD = moment(dueDate).fromNow();
     let timeUntil = dueDate - today;
 
     let timeNormalisedMonth = Math.round((timeUntil / month) * 510);

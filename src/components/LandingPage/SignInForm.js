@@ -31,8 +31,7 @@ class SignInForm extends Component {
             email: this.state.email,
             password: this.state.password
         }
-        console.log(credentials)
-        console.log(process.env.REACT_APP_API_URL + '/api/login/')
+
         axios.post(process.env.REACT_APP_API_URL + '/api/login/', credentials)
             .then(response => {
                 localStorage.setItem('token', 'Bearer ' + response.data.token);

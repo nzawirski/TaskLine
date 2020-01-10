@@ -3,7 +3,8 @@ module.exports = {
         display: 'flex',
         flexDirection: 'row',
         height: '100vh',
-        backgroundImage: 'url(https://i.pinimg.com/originals/ea/80/e8/ea80e8bcf70c0a180cdc6905afb3f1c1.jpg)'
+        backgroundImage: 'url(https://i.pinimg.com/originals/ea/80/e8/ea80e8bcf70c0a180cdc6905afb3f1c1.jpg)',
+        backgroundPosition: 'right top'
     },
 
     //Sidebar
