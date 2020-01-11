@@ -30,7 +30,7 @@ class Project extends Component {
         confirmDeleteModalActive: false,
         taskName: '',
         taskDescription: '',
-        taskDueDate: new Date(),
+        taskDueDate: null,
         addTaskModalActive: false,
 
     }
@@ -310,7 +310,7 @@ class Project extends Component {
                 flexWrap: 'wrap',
             }
             let leftDiv = {
-                backgroundColor: "white",
+                background: "linear-gradient(0deg, #f6fdff 100%, rgba(255,255,255,1) 0%)",
                 margin: "0px",
                 marginTop: '4px',
                 padding: "15px",
@@ -318,7 +318,7 @@ class Project extends Component {
                 boxShadow: "2px 2px 2px Gray",
             }
             let rightDiv = {
-                backgroundColor: "white",
+                background: "linear-gradient(315deg, #d8e9ff 00%, rgba(255,255,255,1) 100%)",
                 margin: '0px',
                 marginTop: '4px',
                 marginLeft: "2px",

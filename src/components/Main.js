@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import Nav from 'react-bootstrap/Nav'
 import styles from '../styles'
 import placeholder from '../images/user_placeholder.png'
+import Icon from '@material-ui/core/Icon';
 
 class Main extends Component {
     constructor(props) {
@@ -77,16 +78,16 @@ class Main extends Component {
                         <Nav fill variant="pills" activeKey={window.location.pathname}>
                             {
                                 [
-                                    { name: "Dashboard", link: "/main" },
-                                    { name: "Projects", link: "/main/projects" },
-                                    { name: "Settings", link: "/main/settings" },
+                                    { icon: <Icon>dashboard</Icon>, name:'Dashboard', link: "/main" },
+                                    { icon: <Icon>account_tree</Icon>,name:"Projects", link: "/main/projects" },
+                                    { icon: <Icon>settings</Icon>,name:"Settings", link: "/main/settings" },
                                 ].map((item, i) => (
                                     <Nav.Link style={styles.navBarVerticalItem} eventKey={item.link} key={i} onClick={() => { this.props.history.push(item.link) }}>
-                                        {item.name}</Nav.Link>
+                                        {item.icon}&nbsp;{item.name}</Nav.Link>
                                 ))
                             }
                             <Nav.Link style={styles.navBarVerticalItem} onClick={this.logOut}>
-                                Log Out
+                                <Icon>exit_to_app</Icon>&nbsp;Log Out
                             </Nav.Link>
                         </Nav>
                     </div>
@@ -98,9 +99,9 @@ class Main extends Component {
                 <Nav fill variant="pills" activeKey={window.location.pathname} style={styles.navBarHorizontal}>
                     {
                         [
-                            { name: "Dashboard", link: "/main" },
-                            { name: "Projects", link: "/main/projects" },
-                            { name: "Settings", link: "/main/settings" },
+                            { name: <Icon>dashboard</Icon>, link: "/main" },
+                            { name: <Icon>account_tree</Icon>, link: "/main/projects" },
+                            { name: <Icon>settings</Icon>, link: "/main/settings" },
                         ].map((item, i) => (
                             <Nav.Item key={i} style={styles.navBarHorizontalItem}>
                                 <Nav.Link eventKey={item.link} onClick={() => { this.props.history.push(item.link) }}>{item.name}</Nav.Link>
@@ -108,7 +109,7 @@ class Main extends Component {
                         ))
                     }
                     <Nav.Link style={styles.navBarHorizontalItem} onClick={this.logOut}>
-                        Log Out
+                        <Icon>exit_to_app</Icon>
                     </Nav.Link>
                 </Nav>)
         }

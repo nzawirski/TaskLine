@@ -21,7 +21,7 @@ class TaskItem extends Component {
                     Status: {task.status}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    Added by {task.added_by.username} &nbsp;<Moment fromNow>{task.create_date}</Moment>
+                    Added by {task.added_by.username}&nbsp;<Moment fromNow>{task.create_date}</Moment>
                 </div>
                 {task.due_date ?
                     <div style={{ color: colorTask(task.due_date), display: 'flex', flexDirection: 'row', fontWeight: 'bold' }}>

@@ -3,7 +3,7 @@ module.exports = {
         display: 'flex',
         flexDirection: 'row',
         height: '100vh',
-        background: 'linear-gradient(90deg, rgba(239,245,255,1) 49%, rgba(233,247,255,1) 100%)'
+        background: 'linear-gradient(90deg, rgba(239,245,255,1) 49%, rgba(233,247,255,1) 100%)',
     },
 
     //Sidebar
@@ -42,13 +42,15 @@ module.exports = {
 
     },
     navBarVerticalItem: {
+        display: 'flex',
+        flexDirection: 'row',
         width: '100%',
         color: 'white',
     },
 
     //Content
     contentPanel: {
-        marginTop: '24px',
+        marginTop: '34px',
         padding: '1% 1% 0 1%',
         flex: 9,
         // backgroundColor: '#FFFFFF'
