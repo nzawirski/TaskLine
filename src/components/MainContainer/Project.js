@@ -10,7 +10,8 @@ import Icon from '@material-ui/core/Icon';
 import Modal from 'react-bootstrap/Modal'
 import TextField from "@material-ui/core/TextField";
 import CustomSnackbar from '../CustomSnackbar'
-
+import { DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/moment';
 import TaskItem from "./TaskItem"
 
 
@@ -27,6 +28,10 @@ class Project extends Component {
         projectName: '',
         userModalActive: false,
         confirmDeleteModalActive: false,
+        taskName: '',
+        taskDescription: '',
+        taskDueDate: new Date(),
+        addTaskModalActive: false,
 
     }
     handleClose = () => {
@@ -79,9 +84,27 @@ class Project extends Component {
     toggleDeleteModal = e => {
         this.setState({ confirmDeleteModalActive: !this.state.confirmDeleteModalActive })
     }
+    toggleAddTaskModal = e => {
+        this.setState({ addTaskModalActive: !this.state.addTaskModalActive })
+    }
     onChangeName = e => {
         this.setState({
             projectName: e.target.value
+        })
+    }
+    onChangeTaskName = e => {
+        this.setState({
+            taskName: e.target.value
+        })
+    }
+    onChangeTaskDescription = e => {
+        this.setState({
+            taskDescription: e.target.value
+        })
+    }
+    onChangeTaskDueDate = e => {
+        this.setState({
+            taskDueDate: e._d
         })
     }
     saveName = e => {
@@ -198,6 +221,87 @@ class Project extends Component {
         )
     }
 
+    addTask = e => {
+        const payload = {
+            name: this.state.taskName,
+            description: this.state.taskDescription ? this.state.taskDescription : null,
+            due_date: this.state.taskDueDate ? this.state.taskDueDate : null
+        }
+        axios.post(process.env.REACT_APP_API_URL + '/api/projects/'+this.state.projectResponse._id+'/tasks',
+         payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+            .then(response => {
+                window.location.reload()
+            })
+            .catch(error => {
+                this.setState({ isError: true })
+
+                if(!error.response){
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
+                switch(error.response.status){
+                    case 400:
+                        this.setState({
+                            errorMessage: "Please fill out all fields"
+                        })
+                        break;
+                    case 403:
+                        this.setState({
+                            errorMessage: "You don't have permission to do this"
+                        })
+                        break;
+                    default:
+                        this.setState({
+                            errorMessage: "Error, pls try again"
+                        })
+                        break;
+                }
+            });
+    }
+
+    addTaskModal = e => {
+        return(
+            <Modal show={this.state.addTaskModalActive} onHide={this.toggleAddTaskModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>New Task</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TextField
+                        required
+                        label="Name"
+                        margin="normal"
+                        value={this.state.taskName}
+                        onChange={this.onChangeTaskName}
+                        fullWidth
+                        variant="outlined"
+                    />
+                    <TextField
+                        required
+                        label="Description"
+                        margin="normal"
+                        value={this.state.taskDescription}
+                        onChange={this.onChangeTaskDescription}
+                        fullWidth
+                        variant="outlined"
+                    />
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <DateTimePicker value={this.state.taskDueDate} onChange={this.onChangeTaskDueDate} />
+                    </MuiPickersUtilsProvider>
+                    
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.toggleAddTaskModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={this.addTask}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
     render() {
         if (this.state.ready) {
             const partent = {
@@ -229,6 +333,7 @@ class Project extends Component {
 
                         <div style={leftDiv}>
                             <h2>Tasks</h2>
+                            <Button variant="success" onClick={this.toggleAddTaskModal}>Add Task</Button>
                             <List style={styles.list}>
                                 {
                                     this.state.projectResponse.tasks.map((task) => (
@@ -266,6 +371,7 @@ class Project extends Component {
                     <CustomSnackbar isError={this.state.isError} errorMessage={this.state.errorMessage} handleClose={this.handleClose} />
                     {this.editNameModal()}
                     {this.confirmDeleteModal()}
+                    {this.addTaskModal()}
                 </div>
             )
         } else {
