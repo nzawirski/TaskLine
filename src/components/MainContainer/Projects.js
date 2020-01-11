@@ -57,7 +57,7 @@ class Projects extends Component {
         }
         axios.post(process.env.REACT_APP_API_URL + '/api/projects/', payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
-                window.location = '/main/projects';
+                window.location.reload()
             })
             .catch(error => {
                 this.setState({ isError: true })

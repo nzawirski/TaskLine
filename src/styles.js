@@ -11,7 +11,6 @@ module.exports = {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-        background: 'dodgerblue',
         background: 'linear-gradient(9deg, #1f66c4 20%, dodgerblue 78%)',
         flex: 2,
         color: 'white'

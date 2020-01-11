@@ -36,6 +36,11 @@ class Settings extends Component {
                 this.setState({ profilePic: response.data.profilePic })
             })
     }
+    handleClose = () => {
+        this.setState({
+            isError: !this.state.isError
+        })
+    };
 
     componentDidMount() {
         this.getMe()
@@ -52,7 +57,7 @@ class Settings extends Component {
         }
         axios.put(process.env.REACT_APP_API_URL + '/api/me/', credentials, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
-                window.location = '/';
+                window.location.reload()
             })
             .catch(error => {
                 this.setState({ isError: true })
@@ -87,7 +92,7 @@ class Settings extends Component {
 
             instance.put('/api/me/profilePic', formData)
                 .then(response => {
-                    this.getMe()
+                    window.location.reload()
                 })
                 .catch(error => {
                     this.setState({ isError: true })
@@ -113,7 +118,7 @@ class Settings extends Component {
         }
     };
 
-    delProfPic() {
+    delProfPic = e => {
         axios.delete(process.env.REACT_APP_API_URL + '/api/me/profilePic', { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.getMe()

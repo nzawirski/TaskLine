@@ -7,7 +7,9 @@ import styles from '../../styles'
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Button from "react-bootstrap/Button";
 import Icon from '@material-ui/core/Icon';
-
+import Modal from 'react-bootstrap/Modal'
+import TextField from "@material-ui/core/TextField";
+import CustomSnackbar from '../CustomSnackbar'
 
 import TaskItem from "./TaskItem"
 
@@ -27,7 +29,11 @@ class Project extends Component {
         confirmDeleteModalActive: false,
 
     }
-
+    handleClose = () => {
+        this.setState({
+            isError: !this.state.isError
+        })
+    };
     getMe() {
         axios.get(process.env.REACT_APP_API_URL + '/api/me', { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
@@ -67,6 +73,131 @@ class Project extends Component {
         window.location = '/';
     }
 
+    toggleEditNameModal = e => {
+        this.setState({ editNameModalActive: !this.state.editNameModalActive })
+    }
+    toggleDeleteModal = e => {
+        this.setState({ confirmDeleteModalActive: !this.state.confirmDeleteModalActive })
+    }
+    onChangeName = e => {
+        this.setState({
+            projectName: e.target.value
+        })
+    }
+    saveName = e => {
+
+        const payload = {
+            name: this.state.projectName,
+        }
+        axios.put(process.env.REACT_APP_API_URL + '/api/projects/'+this.state.projectResponse._id, payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+            .then(response => {
+                window.location.reload()
+            })
+            .catch(error => {
+                this.setState({ isError: true })
+
+                if(!error.response){
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
+                switch(error.response.status){
+                    case 400:
+                        this.setState({
+                            errorMessage: "Please fill out all fields"
+                        })
+                        break;
+                    case 403:
+                        this.setState({
+                            errorMessage: "You don't have permission to do this"
+                        })
+                        break;
+                    default:
+                        this.setState({
+                            errorMessage: "Error, pls try again"
+                        })
+                        break;
+                }
+
+            });
+    }
+
+    editNameModal = e => {
+        return(
+            <Modal show={this.state.editNameModalActive} onHide={this.toggleEditNameModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Project name</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <TextField
+                        required
+                        label="Name"
+                        margin="normal"
+                        value={this.state.projectName}
+                        onChange={this.onChangeName}
+                        fullWidth
+                        variant="outlined"
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.toggleEditNameModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={this.saveName}>
+                        Save
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
+    deleteProject = e => {
+        axios.delete(process.env.REACT_APP_API_URL + '/api/projects/'+this.state.projectResponse._id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+            .then(response => {
+                window.location = '/';
+            })
+            .catch(error => {
+                this.setState({ isError: true })
+
+                if(!error.response){
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
+                switch(error.response.status){
+                    case 403:
+                        this.setState({
+                            errorMessage: "You don't have permission to do this"
+                        })
+                        break;
+                    default:
+                        this.setState({
+                            errorMessage: "Error, pls try again"
+                        })
+                        break;
+                }
+
+            });
+    }
+    confirmDeleteModal = e => {
+        return(
+            <Modal show={this.state.confirmDeleteModalActive} onHide={this.toggleDeleteModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Are you sure you want to delete this project?</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.toggleDeleteModal}>
+                        Close
+                    </Button>
+                    <Button variant="danger" onClick={this.deleteProject}>
+                        Confirm Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
     render() {
         if (this.state.ready) {
             const partent = {
@@ -101,14 +232,15 @@ class Project extends Component {
                             <List style={styles.list}>
                                 {
                                     this.state.projectResponse.tasks.map((task) => (
-                                        <TaskItem task={task} onClick={(id) => this.props.history.push('/main/task/' + id)}></TaskItem>
+                                        <TaskItem task={task} onClick={(id) => this.props.history.push('/main/task/' + id)} key={task._id}></TaskItem>
                                     ))
                                 }
                             </List>
                         </div>
                         <div style={rightDiv}>
                             <h2>Edit project</h2>
-                            <Button>Edit project name</Button>
+                            <Button onClick={this.toggleEditNameModal}>Edit project name</Button> &nbsp;
+                            <Button variant="danger" onClick={this.toggleDeleteModal}>Delete project</Button>
                             <h2>Members</h2>
                             <List style={styles.list}>
                                 {
@@ -131,6 +263,9 @@ class Project extends Component {
 
 
                     </div>
+                    <CustomSnackbar isError={this.state.isError} errorMessage={this.state.errorMessage} handleClose={this.handleClose} />
+                    {this.editNameModal()}
+                    {this.confirmDeleteModal()}
                 </div>
             )
         } else {
