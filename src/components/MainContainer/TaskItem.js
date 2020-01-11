@@ -11,7 +11,7 @@ class TaskItem extends Component {
         let task = this.props.task
         return (
             <ListItem button style={styles.listItem} onClick={() => this.props.onClick(task._id)} key={task._id}>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ display: 'flex', flexDirection: 'row' , fontWeight: 'bold'}}>
                     {task.name}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>

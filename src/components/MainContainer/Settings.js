@@ -178,7 +178,7 @@ class Settings extends Component {
                     <Button
                         type="submit"
                         style={{ marginTop: '20px' }}
-                        variant="outline-success"
+                        variant="success"
                     >
                         {'Apply'}
                     </Button>

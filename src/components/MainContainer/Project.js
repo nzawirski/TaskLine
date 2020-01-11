@@ -11,30 +11,21 @@ import Icon from '@material-ui/core/Icon';
 
 import TaskItem from "./TaskItem"
 
-const partent = {
-    display: "flex",
-}
-const leftDiv = {
-    backgroundColor: "white",
-    margin: "0px",
-    padding: "15px",
-    width: "60%",
-    boxShadow: "2px 2px 2px Gray"
-}
-const rightDiv = {
-    backgroundColor: "white",
-    margin: "0px",
-    marginLeft: "2px",
-    padding: "15px",
-    width: "40%",
-    boxShadow: "2px 2px 2px Gray"
-}
 
 class Project extends Component {
 
+    constructor(props) {
+        super(props)
+        this.updateWindowDimensions = this.updateWindowDimensions.bind(this)
+    }
+
     state = {
-        response: null,
-        ready: false
+        ready: false,
+        editNameModalActive: false,
+        projectName: '',
+        userModalActive: false,
+        confirmDeleteModalActive: false,
+
     }
 
     getMe() {
@@ -50,14 +41,25 @@ class Project extends Component {
         axios.get(process.env.REACT_APP_API_URL + '/api/projects/' + id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ projectResponse: response.data })
+                this.setState({ projectName: response.data.name })
                 this.setState({ ready: true })
-                console.log(this.state.projectResponse)
             })
     }
     componentDidMount() {
+        this.updateWindowDimensions();
+        window.addEventListener('resize', this.updateWindowDimensions);
         const { match: { params } } = this.props;
         const projectId = params.id
         this.getProject(projectId)
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.updateWindowDimensions);
+    }
+
+    updateWindowDimensions() {
+        this.setState({ width: window.innerWidth, height: window.innerHeight });
+        //console.log(this.state.width + " " + this.state.height)
     }
 
     logOut() {
@@ -67,6 +69,28 @@ class Project extends Component {
 
     render() {
         if (this.state.ready) {
+            const partent = {
+                display: "flex",
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+            }
+            let leftDiv = {
+                backgroundColor: "white",
+                margin: "0px",
+                marginTop: '4px',
+                padding: "15px",
+                width: this.state.width < 1024 ? '90%' : '59%',
+                boxShadow: "2px 2px 2px Gray",
+            }
+            let rightDiv = {
+                backgroundColor: "white",
+                margin: '0px',
+                marginTop: '4px',
+                marginLeft: "2px",
+                padding: "15px",
+                width: this.state.width < 1024 ? '90%' : '40%',
+                boxShadow: "2px 2px 2px Gray"
+            }
             return (
                 <div>
                     <h1>{this.state.projectResponse.name}</h1>
@@ -92,12 +116,12 @@ class Project extends Component {
                                         <ListItem button style={styles.listItem} key={member._id}>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                                 {
-                                                    member.role == 'admin' ?
-                                                    <Icon>star</Icon>
-                                                    :
-                                                    <Icon>person</Icon>
+                                                    member.role === 'admin' ?
+                                                        <Icon>star</Icon>
+                                                        :
+                                                        <Icon>person</Icon>
                                                 }
-                                            {member.user.username}
+                                                {member.user.username}
                                             </div>
                                         </ListItem>
                                     ))

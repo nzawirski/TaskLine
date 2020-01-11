@@ -3,8 +3,7 @@ module.exports = {
         display: 'flex',
         flexDirection: 'row',
         height: '100vh',
-        backgroundImage: 'url(https://i.pinimg.com/originals/ea/80/e8/ea80e8bcf70c0a180cdc6905afb3f1c1.jpg)',
-        backgroundPosition: 'right top'
+        background: 'linear-gradient(90deg, rgba(239,245,255,1) 49%, rgba(233,247,255,1) 100%)'
     },
 
     //Sidebar
@@ -12,7 +11,8 @@ module.exports = {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'auto',
-        backgroundColor: 'dodgerblue',
+        background: 'dodgerblue',
+        background: 'linear-gradient(9deg, #1f66c4 20%, dodgerblue 78%)',
         flex: 2,
         color: 'white'
     },
@@ -77,6 +77,6 @@ module.exports = {
     list:{
         flexDirection: 'row',
         flexWrap: 'wrap',
-        display: 'flex'
+        display: 'flex',
     }
 };

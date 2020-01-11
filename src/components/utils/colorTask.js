@@ -1,5 +1,3 @@
-import moment from "moment";
-
 export default function colorTask(dueDate) {
     let today = new Date();
     dueDate = new Date(dueDate)

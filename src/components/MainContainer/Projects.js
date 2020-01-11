@@ -43,7 +43,6 @@ class Projects extends Component {
     componentDidMount() {
         this.getMe()
         this.getProjects()
-        this.setState({ ProjectModalActive: false })
     }
 
     logOut() {
