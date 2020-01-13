@@ -14,7 +14,6 @@ import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/moment';
 import TaskItem from "./TaskItem"
 
-
 class Project extends Component {
 
     constructor(props) {
@@ -237,14 +236,47 @@ class Project extends Component {
     }
 
     addMember = e => {
+        const payload = {
+            newUser: e,
+        }
+        axios.post(process.env.REACT_APP_API_URL + '/api/projects/' + this.state.projectResponse._id + '/members',
+            payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+            .then(response => {
+                window.location.reload()
+            })
+            .catch(error => {
+                this.setState({ isError: true })
 
+                if (!error.response) {
+                    return this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                }
+                switch (error.response.status) {
+                    case 400:
+                        this.setState({
+                            errorMessage: "Bad Request"
+                        })
+                        break;
+                    case 403:
+                        this.setState({
+                            errorMessage: "You don't have permission to do this"
+                        })
+                        break;
+                    default:
+                        this.setState({
+                            errorMessage: "Error, pls try again"
+                        })
+                        break;
+                }
+            });
     }
     searchUser = e => {
-        this.setState({searchFinished: false})
+        this.setState({ searchFinished: false })
         axios.get(process.env.REACT_APP_API_URL + '/api/users/search?search=' + this.state.searchTerm, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ searchResponse: response.data })
-                this.setState({searchFinished: true})
+                this.setState({ searchFinished: true })
             })
     }
 
@@ -270,7 +302,11 @@ class Project extends Component {
                                 {
                                     this.state.searchFinished ?
                                         this.state.searchResponse.map((user) => (
-                                            <ListItem>{user.username}</ListItem>
+                                            <ListItem button onClick={() => this.addMember(user._id)} style={styles.listItem} key={user._id}>
+                                                <div style={{ display: 'flex', flexDirection: 'row', fontWeight: 'bold' }}>
+                                                    {user.username} {user.email}
+                                                </div>
+                                            </ListItem>
                                         ))
                                         :
                                         <CircularProgress />
@@ -284,9 +320,6 @@ class Project extends Component {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={this.toggleAddMemberModal}>
                         Close
-                    </Button>
-                    <Button variant="primary" onClick={this.addMember}>
-                        Add
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -438,7 +471,6 @@ class Project extends Component {
                                 }
                             </List>
                         </div>
-
 
                     </div>
                     <CustomSnackbar isError={this.state.isError} errorMessage={this.state.errorMessage} handleClose={this.handleClose} />
