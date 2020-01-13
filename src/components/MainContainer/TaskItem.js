@@ -1,16 +1,26 @@
 import React, { Component } from 'react';
 import colorTask from "../utils/colorTask"
 import Moment from 'react-moment';
-import styles from '../../styles'
 import ListItem from "@material-ui/core/ListItem";
 
 class TaskItem extends Component {
     state = {}
-
+    
     render() {
+        let listItemRWD = {
+            padding:'5px',
+            margin:'1%',
+            minWidth: '45%',
+            maxWidth: this.props.screeWidth < 1024 ? '100%' : '45%',
+            flexDirection:'column',
+            fontFamily: 'monospace',
+            fontSize: '15px',
+            boxShadow: "1px 1px 2px #111111"
+        }
+        console.log(this.props)
         let task = this.props.task
         return (
-            <ListItem button style={styles.listItem} onClick={() => this.props.onClick(task._id)} key={task._id}>
+            <ListItem button style={listItemRWD} onClick={() => this.props.onClick(task._id)} key={task._id}>
                 <div style={{ display: 'flex', flexDirection: 'row' , fontWeight: 'bold'}}>
                     {task.name}
                 </div>

@@ -308,7 +308,7 @@ class Project extends Component {
                                             <ListItem button
                                                 onClick={() => this.selectUser(user._id)}
                                                 style={
-                                                    this.state.selectedUser == user._id ?
+                                                    this.state.selectedUser === user._id ?
                                                         styles.listItemToggled : styles.listItem
                                                 }
                                                 key={user._id}>
@@ -436,7 +436,7 @@ class Project extends Component {
                 margin: "0px",
                 marginTop: '4px',
                 padding: "15px",
-                width: this.state.width < 1024 ? '90%' : '59%',
+                width: this.state.width < 1024 ? '100%' : '59%',
                 boxShadow: "2px 2px 2px Gray",
             }
             let rightDiv = {
@@ -445,7 +445,7 @@ class Project extends Component {
                 marginTop: '4px',
                 marginLeft: "2px",
                 padding: "15px",
-                width: this.state.width < 1024 ? '90%' : '40%',
+                width: this.state.width < 1024 ? '100%' : '40%',
                 boxShadow: "2px 2px 2px Gray"
             }
             return (
@@ -459,7 +459,7 @@ class Project extends Component {
                             <List style={styles.list}>
                                 {
                                     this.state.projectResponse.tasks.map((task) => (
-                                        <TaskItem task={task} onClick={(id) => this.props.history.push('/main/task/' + id)} key={task._id}></TaskItem>
+                                        <TaskItem task={task} onClick={(id) => this.props.history.push('/main/task/' + id)} key={task._id} screeWidth={this.state.width}></TaskItem>
                                     ))
                                 }
                             </List>
