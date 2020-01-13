@@ -75,6 +75,17 @@ module.exports = {
         fontSize: '15px',
         boxShadow: "1px 1px 2px #111111"
     },
+    listItemToggled:{
+        padding:'5px',
+        margin:'1%',
+        minWidth:'45%',
+        maxWidth:'45%',
+        flexDirection:'column',
+        fontFamily: 'monospace',
+        fontSize: '15px',
+        boxShadow: "1px 1px 2px #111111",
+        backgroundColor: 'dodgerBlue'
+    },
     list:{
         flexDirection: 'row',
         flexWrap: 'wrap',

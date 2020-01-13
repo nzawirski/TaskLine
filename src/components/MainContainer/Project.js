@@ -33,7 +33,8 @@ class Project extends Component {
         addTaskModalActive: false,
         addMemberModalActive: false,
         editMemberModalActive: false,
-        searchFinished: false
+        searchFinished: false,
+        selectedUser: '',
 
     }
     handleClose = () => {
@@ -187,7 +188,6 @@ class Project extends Component {
             </Modal>
         )
     }
-
     deleteProject = e => {
         axios.delete(process.env.REACT_APP_API_URL + '/api/projects/' + this.state.projectResponse._id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
@@ -235,9 +235,12 @@ class Project extends Component {
         )
     }
 
+    selectUser = e => {
+        this.setState({ selectedUser: e })
+    }
     addMember = e => {
         const payload = {
-            newUser: e,
+            newUser: this.state.selectedUser,
         }
         axios.post(process.env.REACT_APP_API_URL + '/api/projects/' + this.state.projectResponse._id + '/members',
             payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
@@ -302,7 +305,13 @@ class Project extends Component {
                                 {
                                     this.state.searchFinished ?
                                         this.state.searchResponse.map((user) => (
-                                            <ListItem button onClick={() => this.addMember(user._id)} style={styles.listItem} key={user._id}>
+                                            <ListItem button
+                                                onClick={() => this.selectUser(user._id)}
+                                                style={
+                                                    this.state.selectedUser == user._id ?
+                                                        styles.listItemToggled : styles.listItem
+                                                }
+                                                key={user._id}>
                                                 <div style={{ display: 'flex', flexDirection: 'row', fontWeight: 'bold' }}>
                                                     {user.username} {user.email}
                                                 </div>
@@ -321,6 +330,14 @@ class Project extends Component {
                     <Button variant="secondary" onClick={this.toggleAddMemberModal}>
                         Close
                     </Button>
+                    {
+                        this.state.selectedUser ?
+                            <Button variant="success" onClick={this.addMember}>
+                                Add User
+                            </Button>
+                            :
+                            null
+                    }
                 </Modal.Footer>
             </Modal>
         )
