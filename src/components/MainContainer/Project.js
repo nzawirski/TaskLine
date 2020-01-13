@@ -3,14 +3,14 @@ import axios from 'axios';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import styles from '../../styles'
-
+import { DebounceInput } from 'react-debounce-input';
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Button from "react-bootstrap/Button";
 import Icon from '@material-ui/core/Icon';
 import Modal from 'react-bootstrap/Modal'
 import TextField from "@material-ui/core/TextField";
 import CustomSnackbar from '../CustomSnackbar'
-import { DateTimePicker, MuiPickersUtilsProvider} from '@material-ui/pickers';
+import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/moment';
 import TaskItem from "./TaskItem"
 
@@ -32,6 +32,9 @@ class Project extends Component {
         taskDescription: '',
         taskDueDate: null,
         addTaskModalActive: false,
+        addMemberModalActive: false,
+        editMemberModalActive: false,
+        searchFinished: false
 
     }
     handleClose = () => {
@@ -87,6 +90,12 @@ class Project extends Component {
     toggleAddTaskModal = e => {
         this.setState({ addTaskModalActive: !this.state.addTaskModalActive })
     }
+    toggleAddMemberModal = e => {
+        this.setState({ addMemberModalActive: !this.state.addMemberModalActive })
+    }
+    toggleEditMemberModal = e => {
+        this.setState({ editMemberModalActive: !this.state.editMemberModalActive })
+    }
     onChangeName = e => {
         this.setState({
             projectName: e.target.value
@@ -107,24 +116,30 @@ class Project extends Component {
             taskDueDate: e._d
         })
     }
+    onChangeSearchTerm = e => {
+        this.setState({
+            searchTerm: e.target.value
+        })
+        this.searchUser()
+    }
     saveName = e => {
 
         const payload = {
             name: this.state.projectName,
         }
-        axios.put(process.env.REACT_APP_API_URL + '/api/projects/'+this.state.projectResponse._id, payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+        axios.put(process.env.REACT_APP_API_URL + '/api/projects/' + this.state.projectResponse._id, payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 window.location.reload()
             })
             .catch(error => {
                 this.setState({ isError: true })
 
-                if(!error.response){
+                if (!error.response) {
                     return this.setState({
                         errorMessage: "Error, pls try again"
                     })
                 }
-                switch(error.response.status){
+                switch (error.response.status) {
                     case 400:
                         this.setState({
                             errorMessage: "Please fill out all fields"
@@ -146,7 +161,7 @@ class Project extends Component {
     }
 
     editNameModal = e => {
-        return(
+        return (
             <Modal show={this.state.editNameModalActive} onHide={this.toggleEditNameModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Project name</Modal.Title>
@@ -175,19 +190,19 @@ class Project extends Component {
     }
 
     deleteProject = e => {
-        axios.delete(process.env.REACT_APP_API_URL + '/api/projects/'+this.state.projectResponse._id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+        axios.delete(process.env.REACT_APP_API_URL + '/api/projects/' + this.state.projectResponse._id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 window.location = '/';
             })
             .catch(error => {
                 this.setState({ isError: true })
 
-                if(!error.response){
+                if (!error.response) {
                     return this.setState({
                         errorMessage: "Error, pls try again"
                     })
                 }
-                switch(error.response.status){
+                switch (error.response.status) {
                     case 403:
                         this.setState({
                             errorMessage: "You don't have permission to do this"
@@ -203,7 +218,7 @@ class Project extends Component {
             });
     }
     confirmDeleteModal = e => {
-        return(
+        return (
             <Modal show={this.state.confirmDeleteModalActive} onHide={this.toggleDeleteModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Are you sure you want to delete this project?</Modal.Title>
@@ -221,26 +236,83 @@ class Project extends Component {
         )
     }
 
+    addMember = e => {
+
+    }
+    searchUser = e => {
+        this.setState({searchFinished: false})
+        axios.get(process.env.REACT_APP_API_URL + '/api/users/search?search=' + this.state.searchTerm, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+            .then(response => {
+                this.setState({ searchResponse: response.data })
+                this.setState({searchFinished: true})
+            })
+    }
+
+    addMemberModal = e => {
+        return (
+            <Modal show={this.state.addMemberModalActive} onHide={this.toggleAddMemberModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Search users</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <DebounceInput
+                        element={TextField}
+                        fullWidth
+                        variant="outlined"
+                        placeholder="Search user"
+                        minLength={1}
+                        debounceTimeout={900}
+                        onChange={this.onChangeSearchTerm}
+                    />
+                    {
+                        this.state.searchResponse ?
+                            <List style={styles.list}>
+                                {
+                                    this.state.searchFinished ?
+                                        this.state.searchResponse.map((user) => (
+                                            <ListItem>{user.username}</ListItem>
+                                        ))
+                                        :
+                                        <CircularProgress />
+                                }
+                            </List>
+                            :
+                            null
+                    }
+
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={this.toggleAddMemberModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={this.addMember}>
+                        Add
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        )
+    }
+
     addTask = e => {
         const payload = {
             name: this.state.taskName,
             description: this.state.taskDescription ? this.state.taskDescription : null,
             due_date: this.state.taskDueDate ? this.state.taskDueDate : null
         }
-        axios.post(process.env.REACT_APP_API_URL + '/api/projects/'+this.state.projectResponse._id+'/tasks',
-         payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+        axios.post(process.env.REACT_APP_API_URL + '/api/projects/' + this.state.projectResponse._id + '/tasks',
+            payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 window.location.reload()
             })
             .catch(error => {
                 this.setState({ isError: true })
 
-                if(!error.response){
+                if (!error.response) {
                     return this.setState({
                         errorMessage: "Error, pls try again"
                     })
                 }
-                switch(error.response.status){
+                switch (error.response.status) {
                     case 400:
                         this.setState({
                             errorMessage: "Please fill out all fields"
@@ -261,7 +333,7 @@ class Project extends Component {
     }
 
     addTaskModal = e => {
-        return(
+        return (
             <Modal show={this.state.addTaskModalActive} onHide={this.toggleAddTaskModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>New Task</Modal.Title>
@@ -288,7 +360,7 @@ class Project extends Component {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker value={this.state.taskDueDate} onChange={this.onChangeTaskDueDate} />
                     </MuiPickersUtilsProvider>
-                    
+
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={this.toggleAddTaskModal}>
@@ -347,6 +419,7 @@ class Project extends Component {
                             <Button onClick={this.toggleEditNameModal}>Edit project name</Button> &nbsp;
                             <Button variant="danger" onClick={this.toggleDeleteModal}>Delete project</Button>
                             <h2>Members</h2>
+                            <Button variant="outline-success" onClick={this.toggleAddMemberModal}>Add new Member</Button> &nbsp;
                             <List style={styles.list}>
                                 {
                                     this.state.projectResponse.members.map((member) => (
@@ -372,6 +445,7 @@ class Project extends Component {
                     {this.editNameModal()}
                     {this.confirmDeleteModal()}
                     {this.addTaskModal()}
+                    {this.addMemberModal()}
                 </div>
             )
         } else {

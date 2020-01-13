@@ -15,7 +15,7 @@ class LandingPage extends Component {
             position: "absolute",
         }
         const leftDiv = {
-            backgroundColor: "DodgerBlue",
+            background: "linear-gradient(9deg, #1f66c4 20%, dodgerblue 78%)",
             margin: "0px",
             padding: "15px",
             color: "white",
