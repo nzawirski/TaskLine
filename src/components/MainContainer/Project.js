@@ -42,15 +42,6 @@ class Project extends Component {
             isError: !this.state.isError
         })
     };
-    getMe() {
-        axios.get(process.env.REACT_APP_API_URL + '/api/me', { 'headers': { 'Authorization': localStorage.getItem('token') } })
-            .then(response => {
-                this.setState({ meResponse: response.data })
-                this.setState({ username: response.data.username })
-                this.setState({ email: response.data.email })
-                this.setState({ profilePic: response.data.profilePic })
-            })
-    }
     getProject(id) {
         axios.get(process.env.REACT_APP_API_URL + '/api/projects/' + id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
@@ -448,6 +439,7 @@ class Project extends Component {
                 width: this.state.width < 1024 ? '100%' : '40%',
                 boxShadow: "2px 2px 2px Gray"
             }
+            let projectId = this.state.projectResponse._id
             return (
                 <div>
                     <h1>{this.state.projectResponse.name}</h1>
@@ -473,7 +465,7 @@ class Project extends Component {
                             <List style={styles.list}>
                                 {
                                     this.state.projectResponse.members.map((member) => (
-                                        <ListItem button style={styles.listItem} key={member._id}>
+                                        <ListItem button style={styles.listItem} onClick={() => this.props.history.push('/main/project/'+projectId+'/member/'+member._id)} key={member._id}>
                                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                                 {
                                                     member.role === 'admin' ?
