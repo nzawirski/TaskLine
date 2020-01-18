@@ -417,7 +417,7 @@ class Project extends Component {
 
     render() {
         if (this.state.ready) {
-            const partent = {
+            const parent = {
                 display: "flex",
                 flexDirection: 'row',
                 flexWrap: 'wrap',
@@ -443,7 +443,7 @@ class Project extends Component {
             return (
                 <div>
                     <h1>{this.state.projectResponse.name}</h1>
-                    <div style={partent}>
+                    <div style={parent}>
 
                         <div style={leftDiv}>
                             <h2>Tasks</h2>
