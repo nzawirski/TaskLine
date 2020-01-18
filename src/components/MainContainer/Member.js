@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import styles from '../../styles'
 import CircularProgress from "@material-ui/core/CircularProgress"
 import Button from "react-bootstrap/Button";
-import Icon from '@material-ui/core/Icon';
 import Modal from 'react-bootstrap/Modal'
-import TextField from "@material-ui/core/TextField";
 import CustomSnackbar from '../CustomSnackbar'
-import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/moment';
 
 
 class Member extends Component {
@@ -28,7 +23,6 @@ class Member extends Component {
                 this.setState({ memberResponse: response.data })
                 this.setState({ role: response.data.role })
                 this.setState({ ready: true })
-                console.log(response.data)
             })
     }
     getProject(id) {

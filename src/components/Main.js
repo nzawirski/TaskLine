@@ -6,6 +6,7 @@ import Projects from './MainContainer/Projects'
 import Settings from './MainContainer/Settings'
 import Project from './MainContainer/Project'
 import Member from './MainContainer/Member'
+import Task from './MainContainer/Task'
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
@@ -130,6 +131,7 @@ class Main extends Component {
                         <Route exact path={"/main/settings"} component={Settings} />
                         <Route path={"/main/project/:projectId/member/:memberId"} component={Member} />
                         <Route path={"/main/project/:id"} component={Project} />
+                        <Route path={"/main/task/:id"} component={Task} />
                         
                     </Switch>
                 </div>

@@ -17,7 +17,6 @@ class TaskItem extends Component {
             fontSize: '15px',
             boxShadow: "1px 1px 2px #111111"
         }
-        console.log(this.props)
         let task = this.props.task
         return (
             <ListItem button style={listItemRWD} onClick={() => this.props.onClick(task._id)} key={task._id}>
