@@ -33,9 +33,14 @@ class TaskItem extends Component {
                     Added by {task.added_by.username}&nbsp;<Moment fromNow>{task.create_date}</Moment>
                 </div>
                 {task.due_date ?
-                    <div style={{ color: colorTask(task.due_date), display: 'flex', flexDirection: 'row', fontWeight: 'bold' }}>
-                        Due&nbsp;<Moment fromNow>{task.due_date}</Moment>
-                    </div>
+                    <>
+                        <div style={{ color: colorTask(task.due_date), display: 'flex', flexDirection: 'row', fontWeight: 'bold' }}>
+                            Due&nbsp;<Moment fromNow>{task.due_date}</Moment>
+                        </div>
+                        <div style={{ color: colorTask(task.due_date), display: 'flex', flexDirection: 'row' }}>
+                            (<Moment format="HH:mm DD-MM-YYYY">{task.due_date}</Moment>)
+                        </div>
+                    </>
                     :
                     null}
             </ListItem>

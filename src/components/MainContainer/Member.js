@@ -172,11 +172,11 @@ class Member extends Component {
 
                             <h2>Edit mebmer role</h2>
                             <label>
-                                <input type="radio" value="admin" checked={this.state.role == 'admin'} onChange={this.handleOptionChange} />
+                                <input type="radio" value="admin" checked={this.state.role === 'admin'} onChange={this.handleOptionChange} />
                                 Admin
                             </label> &nbsp;
                             <label>
-                                <input type="radio" value="member" checked={this.state.role == 'member'} onChange={this.handleOptionChange} />
+                                <input type="radio" value="member" checked={this.state.role === 'member'} onChange={this.handleOptionChange} />
                                 Member
                             </label>
                             <br/>

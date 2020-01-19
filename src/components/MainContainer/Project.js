@@ -10,6 +10,7 @@ import Icon from '@material-ui/core/Icon';
 import Modal from 'react-bootstrap/Modal'
 import TextField from "@material-ui/core/TextField";
 import CustomSnackbar from '../CustomSnackbar'
+import Moment from 'react-moment';
 import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/moment';
 import TaskItem from "./TaskItem"
@@ -398,6 +399,7 @@ class Project extends Component {
                         fullWidth
                         variant="outlined"
                     />
+                    Due date<br/>
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                         <DateTimePicker value={this.state.taskDueDate} onChange={this.onChangeTaskDueDate} />
                     </MuiPickersUtilsProvider>
@@ -447,6 +449,7 @@ class Project extends Component {
 
                         <div style={leftDiv}>
                             <h2>Tasks</h2>
+                            <p>Latest Activity: <Moment fromNow>{this.state.projectResponse.latestActivity}</Moment></p>
                             <Button variant="success" onClick={this.toggleAddTaskModal}>Add Task</Button>
                             <List style={styles.list}>
                                 {
