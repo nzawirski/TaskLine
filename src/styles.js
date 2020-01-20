@@ -1,9 +1,9 @@
+const sidebarWidth = '240px'
 module.exports = {
     mainContainer: {
         display: 'flex',
         flexDirection: 'row',
-        height: '100vh',
-        background: 'linear-gradient(90deg, rgba(239,245,255,1) 49%, rgba(233,247,255,1) 100%)',
+        
     },
 
     //Sidebar
@@ -13,7 +13,10 @@ module.exports = {
         overflow: 'auto',
         background: 'linear-gradient(9deg, #1f66c4 20%, dodgerblue 78%)',
         flex: 2,
-        color: 'white'
+        color: 'white',
+        position: 'fixed',
+        width: sidebarWidth,
+        height: '100vh',
     },
     avatarAndName: {
         display: 'flex',
@@ -53,7 +56,12 @@ module.exports = {
         marginTop: '34px',
         padding: '1% 1% 0 1%',
         flex: 9,
-        // backgroundColor: '#FFFFFF'
+        marginLeft: sidebarWidth,
+    },
+    contentPanel2: {
+        marginTop: '34px',
+        padding: '1% 1% 0 1%',
+        flex: 9,
     },
     
     contentBox: {

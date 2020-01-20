@@ -10,14 +10,20 @@ import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/moment';
 import Moment from 'react-moment';
 import colorTask from "../utils/colorTask"
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Icon from '@material-ui/core/Icon';
 
 class Task extends Component {
     state = {
         ready: false,
+        projectReady: false,
         taskName: '',
         taskDescription: '',
         taskStatus: '',
         taskDueDate: null,
+        selectedUser: '',
+        userSelectActive: false,
     }
     handleClose = () => {
         this.setState({
@@ -25,11 +31,12 @@ class Task extends Component {
         })
     };
     getProject(id) {
+        console.log(id)
         axios.get(process.env.REACT_APP_API_URL + '/api/projects/' + id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ projectResponse: response.data })
                 this.setState({ projectName: response.data.name })
-
+                this.setState({ projectReady: true })
             })
     }
     getTask(id) {
@@ -41,6 +48,8 @@ class Task extends Component {
                 this.setState({ taskDueDate: response.data.due_date })
                 this.setState({ taskStatus: response.data.status })
                 this.setState({ ready: true })
+
+                this.getProject(response.data.parent_project._id)
             })
     }
     componentDidMount() {
@@ -69,16 +78,27 @@ class Task extends Component {
             taskDueDate: e._d
         })
     }
+    toggleUserSelect = e => {
+        this.setState({ userSelectActive: !this.state.userSelectActive })
+    }
     onChangeStatus = e => {
-        this.setState({taskStatus: e.target.value});
+        this.setState({ taskStatus: e.target.value });
+
+        const payload = {
+            status: e.target.value || this.state.taskStatus
+        }
+        this.sendPayload(payload)
     }
     saveTask = e => {
         const payload = {
             name: this.state.taskName || this.taskResponse.name,
             description: this.state.taskDescription || this.state.taskResponse.description,
             due_date: this.state.taskDueDate || this.state.taskResponse.due_date,
-            status: this.state.taskStatus || this.state.taskResponse.status
         }
+        this.sendPayload(payload)
+
+    }
+    sendPayload = payload => {
         axios.put(process.env.REACT_APP_API_URL + '/api/tasks/' + this.state.taskResponse._id,
             payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
@@ -110,6 +130,45 @@ class Task extends Component {
                         break;
                 }
             });
+    }
+    selectUser = e => {
+        this.setState({ selectedUser: e })
+    }
+    assignUser = e => {
+        let payload = {
+            assignee: this.state.selectedUser
+        }
+        axios.post(process.env.REACT_APP_API_URL + '/api/tasks/' + this.state.taskResponse._id + '/users',
+        payload, { 'headers': { 'Authorization': localStorage.getItem('token') } })
+        .then(response => {
+            window.location.reload()
+        })
+        .catch(error => {
+            this.setState({ isError: true })
+
+            if (!error.response) {
+                return this.setState({
+                    errorMessage: "Error, pls try again"
+                })
+            }
+            switch (error.response.status) {
+                case 400:
+                    this.setState({
+                        errorMessage: "Bad Request"
+                    })
+                    break;
+                case 403:
+                    this.setState({
+                        errorMessage: "You don't have permission to do this"
+                    })
+                    break;
+                default:
+                    this.setState({
+                        errorMessage: "Error, pls try again"
+                    })
+                    break;
+            }
+        });
     }
     render() {
         if (this.state.ready) {
@@ -145,7 +204,14 @@ class Task extends Component {
                         <div style={leftDiv}>
                             <h2>{this.state.taskResponse.name}</h2>
                             <p>
-                                Status: <b>{this.state.taskResponse.status}</b><br />
+                                Status:
+                                <select value={this.state.taskStatus} onChange={this.onChangeStatus}>
+                                    <option value='Pending'>Pending</option>
+                                    <option value='In progress'>In progress</option>
+                                    <option value='Completed'>Completed</option>
+                                    <option value='Canceled'>Canceled</option>
+                                </select>
+                                <br />
                                 {this.state.taskResponse.description || 'no description set'}<br />
                                 {
                                     this.state.taskResponse.due_date ?
@@ -161,12 +227,55 @@ class Task extends Component {
 
                             </p>
                             <p>Added by <b>{this.state.taskResponse.added_by.username}</b> <Moment fromNow>{this.state.taskResponse.create_date}</Moment></p>
-                            <select value={this.state.taskStatus} onChange={this.onChangeStatus}>
-                                <option value='Pending'>Pending</option>
-                                <option value='In progress'>In progress</option>
-                                <option value='Completed'>Completed</option>
-                                <option value='Canceled'>Canceled</option>
-                            </select>
+                            <h2>Assigned members</h2>
+                            <List style={styles.list}>
+                                {
+                                    this.state.taskResponse.assigned_users.map((user) => (
+                                        <ListItem button style={styles.listItem} key={user._id}>
+                                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                                {user.username}
+                                            </div>
+                                        </ListItem>
+                                    ))
+                                }
+                            </List>
+                            <Button variant='outline-primary' onClick={this.toggleUserSelect}>
+                                assign users to this task
+                            </Button>
+                            {
+                                this.state.userSelectActive && this.state.projectReady ?
+                                    <>
+                                    <br/>
+                                        Click on user to assign him to this task
+                                        <List style={styles.list}>
+                                            {
+                                                this.state.projectResponse.members.map((member) => (
+                                                    <ListItem button style={styles.listItem} onClick={() => this.selectUser(member.user._id)}
+                                                    style={
+                                                        this.state.selectedUser === member.user._id ?
+                                                            styles.listItemToggled : styles.listItem
+                                                    } key={member._id}>
+                                                        <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                                            {
+                                                                member.role === 'admin' ?
+                                                                    <Icon>star</Icon>
+                                                                    :
+                                                                    <Icon>person</Icon>
+                                                            }
+                                                            {member.user.username}
+                                                        </div>
+                                                    </ListItem>
+                                                ))
+                                            }
+                                        </List>
+                                        <Button variant='outline-success' onClick={this.assignUser}>
+                                            Assign
+                                        </Button>
+                                    </>
+                                    :
+                                    <></>
+                            }
+
                         </div>
                         <div style={rightDiv}>
                             <h2>Edit Task</h2>
@@ -192,7 +301,7 @@ class Task extends Component {
                             <MuiPickersUtilsProvider utils={DateFnsUtils}>
                                 <DateTimePicker value={this.state.taskDueDate} onChange={this.onChangeTaskDueDate} />
                             </MuiPickersUtilsProvider>
-                            <br/><br/>
+                            <br /><br />
                             <Button variant="success" onClick={this.saveTask}>
                                 Save
                             </Button>

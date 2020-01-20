@@ -118,13 +118,13 @@ class Main extends Component {
     }
 
     render() {
-
+        let mainDivStyle = this.state.width > 1024 ? styles.contentPanel : styles.contentPanel2
         return (
             <div style={styles.mainContainer}>
                 {/* SIDEBAR */}
                 <this.renderSidebar />
                 {/* CONTENT */}
-                <div style={styles.contentPanel}>
+                <div style={mainDivStyle}>
                     <Switch>
                         <Route exact path={["/main", "/main/dashboard"]} component={Dashboard} />
                         <Route exact path={"/main/projects"} component={Projects} />
