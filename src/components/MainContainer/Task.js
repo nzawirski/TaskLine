@@ -31,7 +31,6 @@ class Task extends Component {
         })
     };
     getProject(id) {
-        console.log(id)
         axios.get(process.env.REACT_APP_API_URL + '/api/projects/' + id, { 'headers': { 'Authorization': localStorage.getItem('token') } })
             .then(response => {
                 this.setState({ projectResponse: response.data })
@@ -198,7 +197,7 @@ class Task extends Component {
 
                 <div>
                     <h1>{this.state.taskResponse.parent_project.name}</h1>
-                    <Button style={{ display: "block" }} variant="outline-secondary" onClick={() => this.props.history.goBack()}>Return to project</Button>
+                    <Button style={{ display: "block" }} variant="outline-secondary" onClick={() => this.props.history.goBack()}>Return</Button>
                     <div style={parent}>
 
                         <div style={leftDiv}>
@@ -250,7 +249,7 @@ class Task extends Component {
                                         <List style={styles.list}>
                                             {
                                                 this.state.projectResponse.members.map((member) => (
-                                                    <ListItem button style={styles.listItem} onClick={() => this.selectUser(member.user._id)}
+                                                    <ListItem button onClick={() => this.selectUser(member.user._id)}
                                                     style={
                                                         this.state.selectedUser === member.user._id ?
                                                             styles.listItemToggled : styles.listItem
