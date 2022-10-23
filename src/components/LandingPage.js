@@ -10,6 +10,7 @@ class LandingPage extends Component {
     render() {
         const partent = {
             display: "flex",
+            flexWrap: 'wrap',
             width: "100%",
             height: "100%",
             position: "absolute",
@@ -19,13 +20,14 @@ class LandingPage extends Component {
             margin: "0px",
             padding: "15px",
             color: "white",
-            width: "50%",
-
+            flex: "1",
+            minWidth: "450px"
         }
         const rightDiv = {
             margin: "0px",
             padding: "15px",
-            width: "50%",
+            flex: "1",
+            minWidth: "450px"
         }
 
         //form button toggle
